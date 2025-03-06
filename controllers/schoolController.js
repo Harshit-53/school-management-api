@@ -1,11 +1,9 @@
 const db = require("../config/db");
 
-// Add School API
 exports.addSchool = async (req, res) => {
   try {
     const { name, address, latitude, longitude } = req.body;
 
-    // Validation
     if (!name || !address || !latitude || !longitude) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -22,7 +20,6 @@ exports.addSchool = async (req, res) => {
   }
 };
 
-// List Schools API (Sorted by Proximity)
 exports.listSchools = async (req, res) => {
   try {
     const { latitude, longitude } = req.query;
@@ -35,7 +32,7 @@ exports.listSchools = async (req, res) => {
 
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
       const toRad = (angle) => (Math.PI * angle) / 180;
-      const R = 6371; // Radius of the Earth in km
+      const R = 6371;
       const dLat = toRad(lat2 - lat1);
       const dLon = toRad(lon2 - lon1);
       const a =
@@ -45,7 +42,7 @@ exports.listSchools = async (req, res) => {
           Math.sin(dLon / 2) *
           Math.sin(dLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return R * c; // Distance in km
+      return R * c;
     };
 
     const sortedSchools = schools
